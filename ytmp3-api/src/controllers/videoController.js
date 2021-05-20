@@ -25,11 +25,12 @@ const showVideo = (req, res)=>{
     YD.download(videoId , `${videoId}.mp3`);
 
     YD.on("finished", function(err, data) {
-        console.log(JSON.stringify(data));
+        console.log("Done!")
 
+        const filePath = path.join(publicDirPath , `${data.videoId}.mp3`)
 
         //res.sendFile(`${data.videoId}.mp3` , {root : publicDirPath})
-        res.send({path : path.join(publicDirPath , `${data.videoId}.mp3`)})
+        res.download(filePath , `${data.videoTitle}.mp3`)
   
     });
 
@@ -40,7 +41,8 @@ const showVideo = (req, res)=>{
     });
 
     YD.on("progress", function(progress) {
-        console.log(JSON.stringify(progress));
+        console.log(`${progress.videoId} : ${progress.progress.percentage}`)
+
     });
 
 }

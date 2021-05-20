@@ -32,6 +32,8 @@ app.get('/', (req, res, next) =>{
 
 app.get('/video/:url' , videoController.showVideo )
 
+app.delete('/video/:url' , videoController.deleteVideo)
+
 //server startup
 app.listen(app.get('port'), server =>{
     console.info(`Server listen on port ${app.get('port')}`);

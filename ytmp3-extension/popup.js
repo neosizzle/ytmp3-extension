@@ -5,6 +5,7 @@ const container = document.getElementById('container')
 let url = null;
 let videoId = null;
 
+
 //download function
 function download(dataurl, filename) {
     var a = document.createElement("a");
@@ -19,23 +20,27 @@ btn.onclick = ()=>{
     //set inner text to loading
     btn.innerHTML = "Converting..."
 
-    //console.log(videoId)
-    options = {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json'},
+    downloadOptions = {
+        url:`http://localhost:3000/video/${videoId}`//api url
     }
 
-    //send fetch request to api http://localhost:4000/video/${videoId} proxy : https://whispering-journey-13887.herokuapp.com/
-    fetch(`http://localhost:3000/video/${videoId}`, options)
-    .then(response => response.json())
-    .then((data) =>{
+    //chrome api used to download from a url
+    chrome.downloads.download(downloadOptions , ()=>{
+        console.log("Downloaded")
 
-        btn.innerHTML = "Finished!"
+        //after finish downloading, change the button back to its original form
+        btn.innerHTML = "Convert to MP3"
 
-        //generate download link
-        download(data.path, "download");
+        //send delete request to delete video from storage
+        options = {
+            method: 'DELETE',
+        }
+        fetch(`http://localhost:3000/video/${videoId}` , options)//api url
+        .then(response=> response.json())
+        .then(data => console.log(data))
+        .catch(e => console.log(e))
+    })
 
-    });
 
 }
 
@@ -56,9 +61,6 @@ chrome.tabs.query({active: true, lastFocusedWindow: true}, tabs => {
     }
    
 });
-
-const urlParams = new URLSearchParams(window.location.search);
-const myParam = urlParams.get('myParam');
 
 
 
