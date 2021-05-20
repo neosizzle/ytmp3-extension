@@ -1,5 +1,5 @@
 .env
 node_modules
 ffmpeg
-.pem
-.crx
+ytmp3-extension.pem
+ytmp3-extension.crx
